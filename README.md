@@ -28,110 +28,109 @@ Two isolated services managed with Docker Compose:
 
 ---
 
-## 🚀 Getting Started
+# 🚀 Getting Started  
 
-### 1️⃣ Clone the repository
-bash
-git clone https://github.com/<your-username>/vault-login-demo.git
-cd vault-login-demo
-2️⃣ Build and Run
-bash
-Code kopiëren
-docker compose build --no-cache
-docker compose up
-3️⃣ Access the Services
-Vault UI → http://localhost:8200
+## 1️⃣ Clone the Repository  
+bash  
+git clone https://github.com/<your-username>/vault-login-demo.git  
+cd vault-login-demo  
 
-Token: root
+## 2️⃣ Build and Run  
+bash  
+docker compose build --no-cache  
+docker compose up  
 
-Demo Login Page → http://localhost:3000
+## 3️⃣ Access the Services  
+Vault UI → http://localhost:8200  
+Token: root  
 
-4️⃣ Test the Flow
-Open http://localhost:3000 and submit a test username/password (or API key).
+Demo Login Page → http://localhost:3000  
 
-Open the Vault UI → Secrets → secret → logins → select the <timestamp> entry.
+## 4️⃣ Test the Flow  
+Open http://localhost:3000 and submit a test username/password (or API key).  
+Open the Vault UI → Secrets → secret → logins → select the entry.  
+You’ll see the submitted data stored in KV v2 at secret/data/logins/.  
 
-You’ll see the submitted data stored in KV v2 at secret/data/logins/<timestamp>.
+## 5️⃣ Stop  
+bash  
+docker compose down  
 
-5️⃣ Stop
-bash
-Code kopiëren
-docker compose down
+---
 
-📂 Folder Structure
-pgsql
-Code kopiëren
-vault-login-demo/
-├─ docker-compose.yml
-├─ app/
-│  ├─ Dockerfile
-│  ├─ app.js
-│  └─ package.json
-└─ vault/
-   └─ file/
+# 📂 Folder Structure  
 
-🔒 Security Notes
-Vault runs in dev mode for demo purposes only.
-For production:
+vault-login-demo/  
+├─ docker-compose.yml  
+├─ app/  
+│  ├─ Dockerfile  
+│  ├─ app.js  
+│  └─ package.json  
+└─ vault/  
+   └─ file/  
 
-Initialize and unseal:
+---
 
-bash
-Code kopiëren
-vault operator init
-vault operator unseal
-Enable TLS
+# 🔒 Security Notes  
 
-Use AppRole or JWT authentication
+Vault runs in dev mode for demo purposes only. For production:  
 
-Create scoped policies (least privilege) for write-only access to secret/data/logins/*
+Initialize and unseal:  
+bash  
+vault operator init  
+vault operator unseal  
 
-No secrets are committed to Git.
-Ensure your .gitignore excludes:
+Enable TLS  
+Use AppRole or JWT authentication  
+Create scoped policies (least privilege) for write-only access to secret/data/logins/*  
 
-bash
-Code kopiëren
-vault/file/
-node_modules/
-.env
+No secrets are committed to Git. Ensure your .gitignore excludes:  
+bash  
+vault/file/  
+node_modules/  
+.env  
 
-🌱 Future Improvements
-Replace dev token with AppRole for the app
+---
 
-Add HTTPS for the app and Vault
+# 🌱 Future Improvements  
 
-Implement one-time submission tokens that mint reusable hash keys for workflows
+Replace dev token with AppRole for the app  
+Add HTTPS for the app and Vault  
+Implement one-time submission tokens that mint reusable hash keys for workflows  
+Provide n8n examples that read secrets securely by reference (never plaintext)  
 
-Provide n8n examples that read secrets securely by reference (never plaintext)
+---
 
-📊 Architecture Diagram
-pgsql
-Code kopiëren
-   [Client Browser]
-          │  submit credentials
-          ▼
-  ┌──────────────────┐
-  │  HTML Login Form │
-  └──────────────────┘
-          │  POST /submit
-          ▼
-  ┌──────────────────────────────┐
-  │   Node.js Express Backend    │
-  │  (no plaintext in logs)      │
-  └──────────────────────────────┘
-          │  /v1/secret/data/logins/<timestamp>
-          ▼
-  ┌──────────────────────────────┐
-  │   HashiCorp Vault (KV v2)    │
-  │   Local, secure secret store │
-  └──────────────────────────────┘
+# 📊 Architecture Diagram  
 
-💡 Why This Project
-Automating for early clients raised a key question: how can I use their credentials without ever seeing them?
-This proof of concept shows a practical answer — a one-time HTML login page that ships secrets straight to HashiCorp Vault,
-so I can reference a hash/key in workflows (e.g., local n8n) instead of handling raw credentials.
+[Client Browser]  
+│ submit credentials  
+▼  
+┌──────────────────┐  
+│ HTML Login Form  │  
+└──────────────────┘  
+│ POST /submit  
+▼  
+┌──────────────────────────────┐  
+│ Node.js Express Backend      │  
+│ (no plaintext in logs)       │  
+└──────────────────────────────┘  
+│ /v1/secret/data/logins/  
+▼  
+┌──────────────────────────────┐  
+│ HashiCorp Vault (KV v2)      │  
+│ Local, secure secret store   │  
+└──────────────────────────────┘  
 
+---
 
-👤 Author
-Kevin Mast
+# 💡 Why This Project  
+
+Automating for early clients raised a key question: how can I use their credentials without ever seeing them?  
+This proof of concept shows a practical answer — a one-time HTML login page that ships secrets straight to HashiCorp Vault, so I can reference a hash/key in workflows (e.g., local n8n) instead of handling raw credentials.  
+
+---
+
+# 👤 Author  
+
+Kevin Mast  
 Founder — KAI Automation Systems
