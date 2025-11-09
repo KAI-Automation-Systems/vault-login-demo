@@ -137,3 +137,24 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# --- Added for Docker & Vault ---
+# Vault development storage (never push secrets)
+vault/file/
+vault/data/
+vault/logs/
+
+# Local Docker override configs
+docker-compose.override.yml
+
+# Container runtime artefacts
+*.pid
+*.seed
+*.log
+
+# IDE & OS noise
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
